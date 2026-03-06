@@ -16,7 +16,7 @@ FRONTEND_URL  = "http://localhost:3000"
 
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
 GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
-GOOGLE_REDIRECT_URI = os.getenv("GOOGLE_CLIENT_ID")
+GOOGLE_REDIRECT_URI = os.getenv("GOOGLE_REDIRECT_URI")
 
 def get_google_auth_url():
     base = "https://accounts.google.com/o/oauth2/v2/auth"
@@ -101,7 +101,7 @@ async def handle_google_callback(request, response: Response, db):
         # set cookie
         # tokens = AuthService.create_user_tokens(user.user_id)
 
-        
+
 
         # response.set_cookie(
         #     key="access_token",

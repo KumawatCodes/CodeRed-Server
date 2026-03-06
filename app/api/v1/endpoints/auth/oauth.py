@@ -10,7 +10,7 @@ router = APIRouter()
 @router.get("/google/login")
 async def google_login():
     url = get_google_auth_url()
-    print(url)   # 👈 ADD THIS
+    print(url)
     return RedirectResponse(url)
 
 

@@ -6,11 +6,8 @@ from app.core.auth import get_current_user_id
 from app.services.user_service import UserService
 from app.services.auth_service import AuthService
 from app.schemas.auth import ProfileCompletionRequest, AuthResponse
-<<<<<<< HEAD
-from app.schemas.user import UserProfileUpdate  
-=======
+from app.schemas.user import UserProfileUpdate
 from app.schemas.user import UserProfileUpdate, UserResponse
->>>>>>> 826186fe1e0a5631ad54be2e835c5af9ddeecd6f
 from app.models.user import User
 
 router = APIRouter()
