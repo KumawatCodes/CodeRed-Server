@@ -64,7 +64,7 @@ class UserProfileUpdate(BaseModel):
     date_of_birth: Optional[date] = None
     bio: Optional[str] = Field(None, max_length=500)
     preferred_language: Optional[str] = Field(None, max_length=20)
-
+    profile_picture: Optional[str] = None
     @validator('username')
     def validate_username(cls, v):
         if v is not None and len(v) < 3:
@@ -92,6 +92,7 @@ class UserResponse(BaseModel):
     win_rate: float
     problems_solved: int
     profile_complete: bool
+    profile_picture: Optional[str]
     created_at: datetime
 
     class Config:

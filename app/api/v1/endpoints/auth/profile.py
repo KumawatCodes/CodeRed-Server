@@ -1,41 +1,78 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Form,UploadFile,File
 from sqlalchemy.ext.asyncio import AsyncSession
+import cloudinary.uploader
 
 from app.database import get_db
 from app.core.auth import get_current_user_id
 from app.services.user_service import UserService
 from app.services.auth_service import AuthService
+
+from app.schemas.auth import AuthResponse
+
 from app.schemas.auth import ProfileCompletionRequest, AuthResponse
 from app.schemas.user import UserProfileUpdate
+
 from app.schemas.user import UserProfileUpdate, UserResponse
 from app.models.user import User
+from app.config import settings
 
 router = APIRouter()
 
 @router.post("/complete-profile", response_model=AuthResponse)
 async def complete_profile(
-    profile_data: ProfileCompletionRequest,
+    username: str = Form(...),
+    first_name: str = Form(...),
+    last_name: str = Form(...),
+    date_of_birth: str = Form(...),
+    bio: str = Form(None),
+    preferred_language: str = Form(...),
+    profile_picture: UploadFile = File(None),
     user_id: User = Depends(get_current_user_id),
     db: AsyncSession = Depends(get_db)
 ):
     """Complete user profile after registration"""
     # Check if username is available
-    username_exists = await UserService.check_username_exists(db, profile_data.username)
-
-    if username_exists and username_exists.username != profile_data.username:
+    username_exists = await UserService.get_user_by_user_id(db, user_id)
+    print(user_id)
+    print(username)
+    print(username_exists)
+    if username_exists and username_exists.user_id != user_id:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Username already taken"
         )
 
+    image_url =None
+    print(profile_picture)
+    if profile_picture:
+        if profile_picture.content_type not in ["image/jpeg","image/png"]:
+            raise HTTPException(
+                status_code=400,
+                detail="Only JPG and PNG images are allowed"
+            )
+        contents = await profile_picture.read()
+
+        if len(contents) > 5* 1024 *1024:
+            raise HTTPException(
+                status_code=400,
+                detail="Image size must be less than 5MB"
+            )
+
+        profile_picture.file.seek(0)
+
+        upload_result = cloudinary.uploader.upload(profile_picture.file)
+        image_url = upload_result["secure_url"]
+
+    print(image_url)
     # Convert to UserProfileUpdate schema
     profile_update = UserProfileUpdate(
-        username=profile_data.username,
-        first_name=profile_data.first_name,
-        last_name=profile_data.last_name,
-        date_of_birth=profile_data.date_of_birth,
-        bio=profile_data.bio,
-        preferred_language=profile_data.preferred_language
+        username= username,
+        first_name= first_name,
+        last_name= last_name,
+        date_of_birth= date_of_birth,
+        bio= bio,
+        preferred_language= preferred_language,
+        profile_picture = image_url
     )
 
     # Complete profile

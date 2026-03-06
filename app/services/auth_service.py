@@ -69,9 +69,11 @@ class AuthService:
     @staticmethod
     def create_user_tokens(user_id: int) -> dict:
         """Create JWT tokens for authenticated user"""
+        
         access_token = create_access_token(
             data={"sub": str(user_id)},
-            expires_delta=timedelta(minutes=30)
+            expires_delta=timedelta(minutes=30),
+
         )
 
         return {

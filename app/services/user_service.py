@@ -68,7 +68,8 @@ class UserService:
                 user.bio = profile_data.bio
             if profile_data.preferred_language:
                 user.preferred_language = profile_data.preferred_language
-
+            if profile_data.profile_picture:
+                user.profile_picture = profile_data.profile_picture
             # Mark profile as complete
             user.profile_complete = True
 

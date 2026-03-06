@@ -2,23 +2,22 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     # Database
-    DATABASE_URL: str = "postgresql://postgres:password@localhost:5432/codeforge"
+    DATABASE_URL: str
 
     # JWT
-    SECRET_KEY: str = "your-super-secret-key-change-in-production"
-    ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440
+    SECRET_KEY: str 
+    ALGORITHM: str
+    ACCESS_TOKEN_EXPIRE_MINUTES: int
 
-    # Google OAuth
-    GOOGLE_CLIENT_ID: str = ""
-    GOOGLE_CLIENT_SECRET: str = ""
-    GOOGLE_REDIRECT_URI: str = "http://localhost:3000/auth/google/callback"
+    # Google Auth
+    GOOGLE_CLIENT_ID: str
+    GOOGLE_CLIENT_SECRET: str
+    GOOGLE_REDIRECT_URI: str
+    # CLOUDINARY
+    CLOUDINARY_CLOUD_NAME: str
+    CLOUDINARY_API_KEY: str
+    CLOUDINARY_API_SECRET: str
 
-    # RapidAPI
-    # RAPIDAPI_KEY: str = ""
-    # RAPIDAPI_HOST: str = ""
-
-    #JUDGE0_URL: str = "http://20.24.218.29:2358/submissions"
     # Application
     PROJECT_NAME: str = "CodeRed"
     VERSION: str = "1.0.0"
@@ -30,5 +29,3 @@ class Settings(BaseSettings):
         case_sensitive = True
 
 settings = Settings()
-
-# print("CONFIG LOADED →", settings.DATABASE_URL)
