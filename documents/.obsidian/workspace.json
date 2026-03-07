@@ -11,17 +11,26 @@
             "id": "51eaf18afed49b38",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "excalidraw",
               "state": {
-                "file": "Plan.md",
-                "mode": "source",
-                "source": false
+                "file": "services/Excalidraw/Drawing 2026-02-27 19.41.10.excalidraw.md"
               },
+              "icon": "excalidraw-icon",
+              "title": "Drawing 2026-02-27 19.41.10.excalidraw"
+            }
+          },
+          {
+            "id": "6d7f92e3d31981f0",
+            "type": "leaf",
+            "state": {
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "Plan"
+              "title": "New tab"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -166,12 +175,18 @@
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
       "command-palette:Open command palette": false,
-      "bases:Create new base": false
+      "bases:Create new base": false,
+      "obsidian-excalidraw-plugin:New drawing": false
     }
   },
-  "active": "51eaf18afed49b38",
+  "active": "6d7f92e3d31981f0",
   "lastOpenFiles": [
+    "services/Excalidraw/Drawing 2026-02-27 19.41.10.excalidraw.md",
+    "System Design/Drawing 2026-02-28 15.14.09.excalidraw.md",
+    "System Design",
     "Structure Overview.md",
+    "services/Excalidraw",
+    "services",
     "Plan.md"
   ]
 }
