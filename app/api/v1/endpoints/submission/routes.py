@@ -33,7 +33,7 @@ async def run_code(
 # For Submit
 @router.post(
     "/submit",
-    response_model=SubmissionResponse,
+    response_model= SubmissionResponse,
     summary="Create a new code submission"
 )
 async def submit_code(
