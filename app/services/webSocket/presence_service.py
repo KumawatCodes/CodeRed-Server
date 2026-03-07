@@ -1,19 +1,18 @@
-from typing import List
+import json
 from app.core.redis import redis_client
 
-ONLINE_USERS_KEY = "online_users"
+Presence_Channel = "presence"
+class PresenceService:
 
-async def add_online_user(user_id: int):
-    await redis_client.sadd(ONLINE_USERS_KEY, user_id)
-
-async def remove_online_user(user_id: int):
-    await redis_client.srem(ONLINE_USERS_KEY, user_id)
-
-async def get_online_users() -> List[int]:
-    users = await redis_client.smembers(ONLINE_USERS_KEY)
-    return [int(u) for u in users]
-
-async def get_online_friends(user_id: int, friend_ids: List[int]) -> List[int]:
-    online_users = await redis_client.smembers(ONLINE_USERS_KEY)
-    online_users = set(map(int, online_users))
-    return list(online_users.intersection(set(friend_ids)))
+  @staticmethod
+  async def publish_user_online(user_id:int):
+    redis_client.publish(Presence_Channel,json.dumps({
+      "type": "USER_ONLINE",
+      "user_id": user_id
+    }))
+  @staticmethod
+  async def publish_user_offline(user_id:int):
+    redis_client.publish(Presence_Channel,json.dumps({
+      "type": "USER_OFFLINE",
+      "user_id": user_id
+    }))

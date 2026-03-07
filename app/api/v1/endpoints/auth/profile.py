@@ -10,7 +10,7 @@ from app.services.auth_service import AuthService
 from app.schemas.auth import AuthResponse
 
 from app.schemas.auth import ProfileCompletionRequest, AuthResponse
-from app.schemas.user import UserProfileUpdate  
+from app.schemas.user import UserProfileUpdate
 
 from app.schemas.user import UserProfileUpdate, UserResponse
 from app.models.user import User
@@ -40,7 +40,7 @@ async def complete_profile(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Username already taken"
         )
-    
+
     image_url =None
     print(profile_picture)
     if profile_picture:
@@ -104,6 +104,6 @@ async def get_current_user_profile(
     user_id: int = Depends(get_current_user_id),
     response_model = UserResponse,
     db: AsyncSession = Depends(get_db)
-):  
+):
     user = await UserService.get_user_by_user_id(db,user_id)
     return user

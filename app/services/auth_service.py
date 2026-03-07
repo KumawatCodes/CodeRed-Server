@@ -10,7 +10,7 @@ from datetime import timedelta
 
 class AuthService:
     """Authentication service handling user registration and login"""
-    
+
     @staticmethod
     async def create_user(db: AsyncSession, user_data: UserCreate) -> Tuple[Optional[User], Optional[str]]:
         """Create a new user with validation"""
@@ -21,10 +21,10 @@ class AuthService:
             )
             if existing_user.scalar_one_or_none():
                 return None, "Email already registered"
-            
+
             # Create new user with proper hashing
             hashed_password = get_password_hash(user_data.password)
-            
+
             user = User(
                 username=user_data.username,  # Can be None initially
                 email=user_data.email,
@@ -36,13 +36,13 @@ class AuthService:
                 preferred_language=user_data.preferred_language,  # Can be None
                 profile_complete=False  # Profile not complete initially
             )
-            
+
             db.add(user)
             await db.commit()
             await db.refresh(user)
-            
+
             return user, None
-            
+
         except ValueError as e:
             # Password validation errors
             return None, str(e)
@@ -56,12 +56,12 @@ class AuthService:
         try:
             result = await db.execute(select(User).where(User.email == email))
             user = result.scalar_one_or_none()
-            
+
             if not user or not verify_password(password, user.password_hash):
                 return None
-            
+
             return user
-            
+
         except Exception as e:
             print(f"Authentication error: {e}")
             return None
@@ -75,7 +75,7 @@ class AuthService:
             expires_delta=timedelta(minutes=30),
 
         )
-        
+
         return {
             "access_token": access_token,
             "token_type": "bearer",
@@ -87,5 +87,3 @@ class AuthService:
         """Get user by ID"""
         result = await db.execute(select(User).where(User.user_id == user_id))
         return result.scalar_one_or_none()
-    
-    

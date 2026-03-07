@@ -1,13 +1,17 @@
+import asyncio
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.models.user import User
 from app.models.submission import Submission
 from app.core.websocket import websocket_endpoint
-import app.core.cloudinary
+from app.core.ws_manager import manager
+from app.services.webSocket.matchmaking.matchmaking_worker import matchmaking_loop
+
 
 from app.config import settings
 from app.database import engine, Base
+
 
 
 def create_application() -> FastAPI:
@@ -91,6 +95,7 @@ def setup_routes(app: FastAPI) -> None:
         prefix="/api/v1/friends",
         tags=["friends"]
     )
+<<<<<<< HEAD
     app.include_router(
         user.router,
         prefix="/api/v2/user",
@@ -110,6 +115,10 @@ def setup_events(app: FastAPI) -> None:
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
         print(" Database tables created successfully")
+=======
+    #Added websocket route
+    app.add_api_websocket_route("/ws",websocket_endpoint)
+>>>>>>> 5b52b944073665000322ecf8cb4c549095f25ce1
 
     @app.get("/")
     async def root():
@@ -123,6 +132,17 @@ def setup_events(app: FastAPI) -> None:
     async def health_check():
         return {"status": "healthy", "service": "CodeForge API"}
 
-app = create_application()
+def setup_events(app: FastAPI) -> None:
+    """Setup startup/shutdown events"""
 
-app.add_api_websocket_route("/ws",websocket_endpoint)
+    @app.on_event("startup")
+    async def startup_event():
+
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+        print(" Database tables created successfully")
+        await manager.start_listener()
+
+        asyncio.create_task(matchmaking_loop())
+
+app = create_application()
