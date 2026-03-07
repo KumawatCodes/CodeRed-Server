@@ -95,7 +95,7 @@ def setup_routes(app: FastAPI) -> None:
         prefix="/api/v1/friends",
         tags=["friends"]
     )
-<<<<<<< HEAD
+
     app.include_router(
         user.router,
         prefix="/api/v2/user",
@@ -115,10 +115,8 @@ def setup_events(app: FastAPI) -> None:
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
         print(" Database tables created successfully")
-=======
     #Added websocket route
     app.add_api_websocket_route("/ws",websocket_endpoint)
->>>>>>> 5b52b944073665000322ecf8cb4c549095f25ce1
 
     @app.get("/")
     async def root():
