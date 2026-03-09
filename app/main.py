@@ -61,8 +61,9 @@ def setup_routes(app: FastAPI) -> None:
     from app.api.v1.endpoints import problem
     from app.api.v1.endpoints import users
     from app.api.v1.endpoints import friends
-    from app.api.v2.endpoints import user
-    from app.api.v2.endpoints import auth
+    from app.api.v1.endpoints import auth
+    # from app.api.v2.endpoints import user
+    # from app.api.v2.endpoints import auth
     #authentication APIs
     app.include_router(
         auth.router,
@@ -94,27 +95,27 @@ def setup_routes(app: FastAPI) -> None:
         tags=["friends"]
     )
 
-    app.include_router(
-        user.router,
-        prefix="/api/v2/user",
-        tags=["user"]
-    )
-    app.include_router(
-        auth.router,
-        prefix="/api/v2/auth",
-        tags=["auth"]
-    )
+    # app.include_router(
+    #     user.router,
+    #     prefix="/api/v2/user",
+    #     tags=["user"]
+    # )
+    # app.include_router(
+    #     auth.router,
+    #     prefix="/api/v2/auth",
+    #     tags=["auth"]
+    # )
 def setup_events(app: FastAPI) -> None:
     """Setup startup/shutdown events"""
 
-    @app.on_event("startup")
-    async def startup_event():
+    # @app.on_event("startup")
+    # async def startup_event():
 
-        async with engine.begin() as conn:
-            await conn.run_sync(Base.metadata.create_all)
-        print(" Database tables created successfully")
-    #Added websocket route
-    app.add_api_websocket_route("/ws",websocket_endpoint)
+    #     async with engine.begin() as conn:
+    #         await conn.run_sync(Base.metadata.create_all)
+    #     print(" Database tables created successfully")
+    # #Added websocket route
+    # app.add_api_websocket_route("/ws",websocket_endpoint)
 
     @app.get("/")
     async def root():
@@ -131,14 +132,14 @@ def setup_events(app: FastAPI) -> None:
 def setup_events(app: FastAPI) -> None:
     """Setup startup/shutdown events"""
 
-    @app.on_event("startup")
-    async def startup_event():
+    # @app.on_event("startup")
+    # async def startup_event():
 
-        async with engine.begin() as conn:
-            await conn.run_sync(Base.metadata.create_all)
-        print(" Database tables created successfully")
-        await manager.start_listener()
+    #     async with engine.begin() as conn:
+    #         await conn.run_sync(Base.metadata.create_all)
+    #     print(" Database tables created successfully")
+    #     await manager.start_listener()
 
-        asyncio.create_task(matchmaking_loop())
+    #     asyncio.create_task(matchmaking_loop())
 
 app = create_application()
