@@ -40,9 +40,7 @@ def setup_middleware(app: FastAPI) -> None:
     # Allow both your frontend URLs
     origins = [
         "http://localhost:3000",
-        "http://127.0.0.1:3000",
-        "http://localhost:8000",
-
+        "http://10.166.76.250:3000",
     ]
 
     app.add_middleware(

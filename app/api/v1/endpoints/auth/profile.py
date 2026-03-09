@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Form,UploadFile,File
 from sqlalchemy.ext.asyncio import AsyncSession
 import cloudinary.uploader
+from app.core.cloudinary import cloudinary
 
 from app.database import get_db
 from app.core.auth import get_current_user_id
