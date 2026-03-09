@@ -7,13 +7,14 @@ class Settings(BaseSettings):
 
     # JWT
     SECRET_KEY: str
-    ALGORITHM: str 
+    ALGORITHM: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440
 
     # Google OAuth
-    GOOGLE_CLIENT_ID: str 
-    GOOGLE_CLIENT_SECRET: str 
-    GOOGLE_REDIRECT_URI: str 
+    GOOGLE_CLIENT_ID: str
+    GOOGLE_CLIENT_SECRET: str
+    GOOGLE_REDIRECT_URI: str
+    GOOGLE_API_KEY: str
 
     # Cloudinary
     CLOUDINARY_CLOUD_NAME: str
@@ -21,7 +22,7 @@ class Settings(BaseSettings):
     CLOUDINARY_API_SECRET: str
     PISTON_API_URL: str
     # APIs
-    GOOGLE_API_KEY: str
+
     # Application
     PROJECT_NAME: str = "CodeRed"
     VERSION: str = "1.0.0"

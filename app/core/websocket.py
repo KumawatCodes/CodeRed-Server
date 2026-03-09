@@ -8,20 +8,24 @@ from app.services.webSocket.matchmaking.match_service import match_service
 import time
 
 async def websocket_endpoint(websocket: WebSocket):
-
+    print("Aagya mc")
     token = websocket.cookies.get("access_token")
     if not token:
         await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
+        print("token ki maa chud gyi")
         return
 
     payload = verify_token(token)
+    print("payload",payload)
     if not payload:
         await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
+        print("token ki maa chud gyi2 baar")
         return
 
     user_id = payload.get("sub")
     if not user_id:
         await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
+        print("user ki maa chud gyi")
         return
 
     async for db in get_db():
@@ -30,8 +34,10 @@ async def websocket_endpoint(websocket: WebSocket):
 
     if not user:
         await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
+        print("user ki maa chud gyi 2 baar")
         return
 
+    print("phuch gyaa mc")
     await websocket.accept()
 
     await manager.connect(user.user_id, websocket)
