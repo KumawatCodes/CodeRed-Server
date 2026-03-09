@@ -15,7 +15,6 @@ from app.schemas.user import UserProfileUpdate
 
 from app.schemas.user import UserProfileUpdate, UserResponse
 from app.models.user import User
-from app.config import settings
 
 router = APIRouter()
 
@@ -34,9 +33,9 @@ async def complete_profile(
     """Complete user profile after registration"""
     # Check if username is available
     username_exists = await UserService.get_user_by_user_id(db, user_id)
-    print(user_id)
-    print(username)
-    print(username_exists)
+    # print(user_id)
+    # print(username)
+    # print(username_exists)
     if username_exists and username_exists.user_id != user_id:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,

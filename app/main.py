@@ -55,17 +55,19 @@ def setup_routes(app: FastAPI) -> None:
     """Setup all API routes"""
 
     # REST API
-    from app.api.v1.endpoints import auth
+    # from app.api.v1.endpoints import auth
     from app.api.v1.endpoints import submission
     from app.api.v1.endpoints import problem
     from app.api.v1.endpoints import users
     from app.api.v1.endpoints import friends
+    from app.api.v2.endpoints import user
+    from app.api.v2.endpoints import auth
     # authentication APIs
-    app.include_router(
-        auth.router,
-        prefix="/api/v1",
-        tags=["Auth"]
-    )
+    # app.include_router(
+    #     auth.router,
+    #     prefix="/api/v1",
+    #     tags=["Auth"]
+    # )
     # code Submission APIs
     app.include_router(
         submission.router,
@@ -84,12 +86,32 @@ def setup_routes(app: FastAPI) -> None:
         prefix="/api/v1",
         tags=["users"]
     )
-    # # Friends ID
+    # Friends ID
     app.include_router(
         friends.router,
         prefix="/api/v1/friends",
         tags=["friends"]
     )
+
+    app.include_router(
+        user.router,
+        prefix="/api/v2/user",
+        tags=["user"]
+    )
+    app.include_router(
+        auth.router,
+        prefix="/api/v2/auth",
+        tags=["auth"]
+    )
+def setup_events(app: FastAPI) -> None:
+    """Setup startup/shutdown events"""
+
+    @app.on_event("startup")
+    async def startup_event():
+
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+        print(" Database tables created successfully")
     #Added websocket route
     app.add_api_websocket_route("/ws",websocket_endpoint)
 
