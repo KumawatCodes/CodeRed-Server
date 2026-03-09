@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 # -- App imports --
 from app.models.submission import Submission
 from app.models.test_cases import TestCases
-from app.schemas.submission import CodeRunRequest, SolutionSubmitRequest
+from app.schemas.submission import CodeRunRequest, CodeSubmitRequest
 
 # --------------------------
 # Piston Configuration
@@ -235,7 +235,7 @@ async def run_code_service(db: Session, run_request: CodeRunRequest) -> Dict[str
 # 2. SUBMIT SERVICE (All Cases)
 # --------------------------
 async def submit_solution_service(
-    db: Session, submission_in: SolutionSubmitRequest, user_id: int
+    db: Session, submission_in: CodeSubmitRequest, user_id: int
 ) -> Submission | Dict[str, Any]:
     """
     SUBMIT endpoint:

@@ -16,8 +16,9 @@ async def login(
 ):
     """Login user with email and password"""
     # Check if user exists
+    print(login_data.email)
     user_exists = await UserService.check_email_exists(db, login_data.email)
-
+    print(user_exists)
     if not user_exists:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -52,5 +53,5 @@ async def login(
         token_type="bearer",
         user_id=user.user_id,
         profile_complete=user.profile_complete,
-        message="Login successful" if user.profile_complete else "Profile completion required"
+        message="Login hai mc successful" if user.profile_complete else "Profile completion required"
     )

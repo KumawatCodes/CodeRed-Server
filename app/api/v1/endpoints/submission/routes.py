@@ -4,7 +4,7 @@ from typing import Any
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import text
 # Import Schemas
-from app.schemas.submission import CodeRunRequest,SolutionSubmitRequest, SubmissionResponse
+from app.schemas.submission import CodeRunRequest,CodeSubmitRequest, SubmissionResponse
 from app.schemas.user import UserResponse
 
 # Import service
@@ -37,7 +37,7 @@ async def run_code(
     summary="Create a new code submission"
 )
 async def submit_code(
-    submission_in: SolutionSubmitRequest,
+    submission_in: CodeSubmitRequest,
     db: Session = Depends(get_db),
     user_id: int = Depends(get_current_user_id)
 ) -> Any:
