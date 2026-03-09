@@ -56,6 +56,6 @@ class UserRepo:
         Returns:
             user info
         """
-        stmt = select(User).where(User.user_id == user_id).values(last_login= func.now())
+        stmt = update(User).where(User.user_id == user_id).values(last_login= func.now())
         await db.execute(stmt)
     

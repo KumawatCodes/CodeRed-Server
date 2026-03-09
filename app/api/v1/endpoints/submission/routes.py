@@ -10,7 +10,7 @@ from app.schemas.user import UserResponse
 # Import service
 from app.services import submission_service
 
-# Import dependencies (auth and db)
+# Import dependencies 
 from app.core.auth import get_current_user_id
 from app.database import get_db
 
@@ -45,14 +45,14 @@ async def submit_code(
     Receives code from frontend,send to submission service to be
     executed by Judge0 and returns final result
 
-    - **submission_in**: The code, language ID, and stdin from the user.
-    - **current_user**: The user data, injected by the auth dependency.
+    - submission_in: The code, language ID, and stdin from the user.
+    - current_user: The user data, injected by the auth dependency.
     """
 
     result = await submission_service.submit_solution_service(
         db=db,
         submission_in=submission_in,
-        user_id=user_id # Pass user id to the service
+        user_id=user_id
     )
 
     # Check if the service returned an error

@@ -38,7 +38,7 @@ class UserService:
     @staticmethod
     async def get_user_by_username(db: AsyncSession, username: str) ->User:
         """
-        get user by username
+        get user by username\n
         Args:
             db (AsyncSession) = database session
             username (str) = username of user

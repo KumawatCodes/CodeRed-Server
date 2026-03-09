@@ -18,11 +18,14 @@ class Settings(BaseSettings):
     CLOUDINARY_API_KEY: str
     CLOUDINARY_API_SECRET: str
 
+    # APIs
+    GOOGLE_API_KEY: str
     # Application
     PROJECT_NAME: str = "CodeRed"
     VERSION: str = "1.0.0"
     DEBUG: bool = True
     ENVIRONMENT: str = "development"
+
 
     class Config:
         env_file = ".env"

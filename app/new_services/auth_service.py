@@ -1,12 +1,15 @@
 import logging
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.schemas.auth import RegisterRequest
-from app.core.security import get_password_hash, create_access_token
+from app.schemas.auth import RegisterRequest, LoginRequest
+from app.core.security import get_password_hash, create_access_token, verify_password
 from app.models import User
 from app.repositories.user_repo import UserRepo
-from app.core.exceptions import UserEmailAlreadyExists,TokenNotCreated
+from app.core.exceptions import UserEmailAlreadyExists,TokenNotCreated, UserEmailNotFound, WrongPassword
+from app.repositories.auth_repo import AuthRepo
 from datetime import timedelta
+
 logger = logging.getLogger(__name__)
+
 class AuthService:
     """ authentication services"""
 
@@ -20,7 +23,7 @@ class AuthService:
             User data
         """
 
-        logger.info("fetching register data of user",extra={
+        logger.info("registering new user data",extra={
             "email ": register_data.email,
             "password:": "********" 
         })
@@ -34,16 +37,42 @@ class AuthService:
         logger.info("creating new user")
         hashed_password = get_password_hash(register_data.password)
 
-        new_user_data = User(
-            email = register_data.email,
-            password_hash = hashed_password,
+        new_user= await AuthRepo.register_user(
+            db,register_data.email,hashed_password
         )
-        db.add(new_user_data)
-        await db.commit()
-        await db.refresh(new_user_data)
-
-        new_user = await UserRepo.get_user_by_email(db,new_user_data.email)
         return new_user
+
+    @staticmethod
+    async def login_user(db: AsyncSession, login_data: LoginRequest) -> User:
+        """
+        login user in db with login data\n
+        Args:
+            login_data = email + password
+        Returns:
+            User data
+        """
+
+        logger.info("logging user",extra={
+            "email: ": login_data.email,
+            "password:": "********" 
+        })
+        
+        user = await UserRepo.get_user_by_email(db,login_data.email)
+
+        if user is None:
+            logger.warning("user does not exists")
+            raise UserEmailNotFound()
+        
+        logger.info("cross verifying password")
+        
+        correct_password = verify_password(login_data.password,user.password_hash)
+
+        if not correct_password:
+            logger.warning("incorrect password")
+            raise WrongPassword()
+        
+        await UserRepo.update_last_login(db,user.user_id) # updating last login time
+        return user
 
     @staticmethod
     def create_user_tokens(user_id: int) ->dict:

@@ -41,7 +41,6 @@ def setup_middleware(app: FastAPI) -> None:
     origins = [
         "http://localhost:3000",
         "http://127.0.0.1:3000",
-        "https://ec3d0556de7f.ngrok-free.app",
         "http://localhost:8000",
 
     ]
@@ -109,14 +108,14 @@ def setup_routes(app: FastAPI) -> None:
 def setup_events(app: FastAPI) -> None:
     """Setup startup/shutdown events"""
 
-    @app.on_event("startup")
-    async def startup_event():
+    # @app.on_event("startup")
+    # async def startup_event():
 
-        async with engine.begin() as conn:
-            await conn.run_sync(Base.metadata.create_all)
-        print(" Database tables created successfully")
-    #Added websocket route
-    app.add_api_websocket_route("/ws",websocket_endpoint)
+    #     async with engine.begin() as conn:
+    #         await conn.run_sync(Base.metadata.create_all)
+    #     print(" Database tables created successfully")
+    # #Added websocket route
+    # app.add_api_websocket_route("/ws",websocket_endpoint)
 
     @app.get("/")
     async def root():
@@ -133,14 +132,14 @@ def setup_events(app: FastAPI) -> None:
 def setup_events(app: FastAPI) -> None:
     """Setup startup/shutdown events"""
 
-    @app.on_event("startup")
-    async def startup_event():
+    # @app.on_event("startup")
+    # async def startup_event():
 
-        async with engine.begin() as conn:
-            await conn.run_sync(Base.metadata.create_all)
-        print(" Database tables created successfully")
-        await manager.start_listener()
+    #     async with engine.begin() as conn:
+    #         await conn.run_sync(Base.metadata.create_all)
+    #     print(" Database tables created successfully")
+    #     await manager.start_listener()
 
-        asyncio.create_task(matchmaking_loop())
+    #     asyncio.create_task(matchmaking_loop())
 
 app = create_application()

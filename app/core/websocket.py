@@ -7,7 +7,6 @@ from app.services.webSocket.matchmaking.matchmaking_service import matchmaking_s
 from app.services.webSocket.matchmaking.match_service import match_service
 import time
 
-
 async def websocket_endpoint(websocket: WebSocket):
 
     token = websocket.cookies.get("access_token")

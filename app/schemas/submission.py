@@ -14,33 +14,13 @@ class SubmissionBase(BaseModel):
 # Create Schema: Data from frontend to create a submission
 class SubmissionCreate(BaseModel):
     """Data required to create a new submission"""
-    source_code: str = Field(
-        ...,
-        min_length=10,
-        description="Source code to be executed"
-    )
-
-    language_id: int = Field(
-        ...,
-        description="Id of the languade"
-    )   
-
-    stdin: Optional[str] = Field(
-        None,
-        description="Standard input for a 'Run' operation"
-    )
-    
-    problem_id: Optional[int] = Field(
-        None,
-        description="Id of the problem being submitted"
-    )
-
-    match_id: Optional[int] = Field(
-        None,
-        description="Id of the match"
-    )
-
-# Update schema: Data to UPDATE a submission
+    user_id: int
+    problem_id: int
+    verdict: str
+    language_id: int
+    execution_time: Optional[float] = None
+    memory_used: Optional[int] = None
+    submitted_at: datetime
 
 class SubmissionUpdate(BaseModel):
     """Fields to update after judge0 processing"""
@@ -58,18 +38,18 @@ class SubmissionUpdate(BaseModel):
 class CodeRunRequest(BaseModel):
     source_code: str = Field(
         ...,
-        min_length=10
+        min_length=5
     )
     language_id: int
     problem_id: int
-    stdin: Optional[str] = None
 
-class SolutionSubmitRequest(BaseModel):
+class CodeSubmitRequest(BaseModel):
     source_code: str = Field(...,min_length=10)
     language_id: int
     problem_id: int
-# Response Schema: Data send Back to frontend
 
+
+# Response Schema: Data send Back to frontend
 class SubmissionResponse(SubmissionBase):
     """Full submission details sent back to the client"""
     submission_id: int

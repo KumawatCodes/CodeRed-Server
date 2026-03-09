@@ -63,4 +63,11 @@ dependencies = [
     "uvicorn==0.24.0",
     "watchfiles==1.1.1",
     "websockets==15.0.1",
+    "langchain",
+    "langchain-core",
+    "langchain-community",
+    "langgraph",
+    "langchain-google-genai",
+    "langchain-mistralai",
+    "langchain_huggingface"
 ]
