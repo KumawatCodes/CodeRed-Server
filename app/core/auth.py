@@ -16,6 +16,7 @@ async def get_current_user_id(
     )
 
     token = request.cookies.get("access_token")
+    print("Token",token)
     if not token:
         raise credentials_exception
 
