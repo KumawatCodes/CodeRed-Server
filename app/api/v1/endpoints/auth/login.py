@@ -47,7 +47,6 @@ async def login(
         samesite="none",
         max_age=60 * 60 * 24
     )
-
     return AuthResponse(
         access_token=None,
         token_type="bearer",

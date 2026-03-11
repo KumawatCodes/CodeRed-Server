@@ -1,0 +1,20 @@
+
+services:
+
+  backend:
+    build: ./
+    container_name: codered-api
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+    environment:
+      REDIS_URL: redis://redis:6379
+    volumes:
+      - .:/app
+
+  redis:
+    image: redis:7-alpine
+    container_name: codered-redis
+    ports:
+      - "6379:6379"
