@@ -69,5 +69,6 @@ dependencies = [
     "langgraph",
     "langchain-google-genai",
     "langchain-mistralai",
-    "langchain_huggingface"
+    "langchain_huggingface",
+    "locust>=2.43.3",
 ]

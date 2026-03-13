@@ -8,7 +8,7 @@ from app.schemas.auth import LoginRequest, AuthResponse
 
 router = APIRouter()
 
-@router.post("/lOGgin", response_model=AuthResponse)
+@router.post("/login", response_model=AuthResponse)
 async def login(
     login_data: LoginRequest,
     response: Response,

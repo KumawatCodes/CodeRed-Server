@@ -9,14 +9,15 @@ from app.services.auth_service import AuthService
 async def get_current_user_id(
     request: Request,
     db: AsyncSession = Depends(get_db)
-) -> User:
+) -> int:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Not authenticated",
     )
 
     token = request.cookies.get("access_token")
-    print("Token",token)
+    print("Cookies:", request.cookies)
+    print("Headers:", request.headers)
     if not token:
         raise credentials_exception
 
