@@ -1,7 +1,6 @@
 from fastapi import APIRouter ,HTTPException, Depends, Response,status
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
-from app.core.security import create_access_token
 from app.schemas.auth import RegisterRequest, AuthResponse, LoginRequest
 from app.core.exceptions import (
     UserEmailAlreadyExists, 
@@ -9,6 +8,7 @@ from app.core.exceptions import (
     UserEmailNotFound,
     WrongPassword)
 from app.new_services.auth_service import AuthService
+
 
 router = APIRouter()
 

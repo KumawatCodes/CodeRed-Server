@@ -7,7 +7,9 @@ from app.models.submission import Submission
 from app.core.websocket import websocket_endpoint
 from app.core.ws_manager import manager
 from app.core.event_listener import event_listener
+import logging
 
+logging.basicConfig(level=logging.INFO)
 
 from app.config import settings
 from app.database import engine, Base
@@ -60,8 +62,9 @@ def setup_routes(app: FastAPI) -> None:
     from app.api.v1.endpoints import users
     from app.api.v1.endpoints import friends
     from app.api.v1.endpoints import auth
-    # from app.api.v2.endpoints import user
+    from app.api.v2.endpoints import user
     # from app.api.v2.endpoints import auth
+    from app.api.v2.endpoints import code_execution
     #authentication APIs
     app.include_router(
         auth.router,
@@ -106,6 +109,15 @@ def setup_routes(app: FastAPI) -> None:
     #     prefix="/api/v2/auth",
     #     tags=["auth"]
     # )
+    # app.include_router(
+    #     code_execution.router,
+    #     prefix="/api/v2/execution",
+    #     tags=["code execution"]
+    # )
+    #Websocket route
+    # app.add_api_websocket_route("/ws",websocket_endpoint)
+
+
 def setup_events(app: FastAPI) -> None:
     """Setup startup/shutdown events"""
 
@@ -132,19 +144,17 @@ def setup_events(app: FastAPI) -> None:
     async def health_check():
         return {"status": "healthy", "service": "CodeForge API"}
 
+def setup_events(app: FastAPI) -> None:
+    """Setup startup/shutdown events"""
 
+    @app.on_event("startup")
+    async def startup_event():
 
-# def setup_events(app: FastAPI) -> None:
-#     """Setup startup/shutdown events"""
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+        print(" Database tables created successfully")
+        await manager.start_listener()
 
-#     @app.on_event("startup")
-#     async def startup_event():
-
-#         async with engine.begin() as conn:
-#             await conn.run_sync(Base.metadata.create_all)
-#         print(" Database tables created successfully")
-
-
-
+        asyncio.create_task(matchmaking_loop())
 
 app = create_application()

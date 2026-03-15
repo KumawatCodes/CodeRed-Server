@@ -1,8 +1,7 @@
 from pydantic import BaseModel,Field
-from typing import Optional,List
+from typing import Optional,List,Any
 from datetime import datetime
 from .test_cases import TestCasesSampleResponse
-
 # Base Schema: Common fields for a submission
 class SubmissionBase(BaseModel):
     """Common fields for a submission"""
@@ -47,32 +46,27 @@ class CodeSubmitRequest(BaseModel):
     source_code: str = Field(...,min_length=10)
     language_id: int
     problem_id: int
-
+    match_id: Optional[str]
 
 # Response Schema: Data send Back to frontend
-class SubmissionResponse(SubmissionBase):
+class SubmissionResponse(BaseModel):
     """Full submission details sent back to the client"""
-    submission_id: int
-    user_id: int
-    verdict: str
-    status_id: Optional[int] = None
-    execution_time: Optional[float] = None
-    memory_used: Optional[int] = None
-
-    stdout: Optional[str] = None
+    submission_id: Optional[int]=None
+    passed: Optional[bool]=None
+    problem_id: Optional[int]=None
+    verdict: Optional[str]=None
+    execution_time: Optional[float]=None
+    memory_used: Optional[int]=None
+    output_mismatch: Optional[dict[str,Any]]=None
     stderr: Optional[str] = None
-    compile_output: Optional[str] = None
-
-    test_cases_passed: Optional[int] = None
-    total_test_cases: Optional[int] = None
-
-    submitted_at: datetime
-    judged_at: Optional[datetime] = None
+    test_cases_passed: Optional[int]=None
+    total_test_cases: Optional[int]=None
+    time_complexity: Optional[str]=None
+    space_complexity: Optional[str]=None
+    source_code: Optional[str]=None
 
     class Config:
-        from_attributes = True  #(ALlow pydantic to read the data from the ORM models)
-
-# Simple Response Schema: For lists
+        from_attributes = True  
 
 class SubmissionSimpleResponse(BaseModel):
     """A lightweight response for lists"""
@@ -87,3 +81,17 @@ class SubmissionSimpleResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class FinalWinnerRequest( BaseModel):
+    player1_id: int
+    player2_id: int
+    match_id: str
+
+class FinalWinnerResponse( BaseModel):
+    results: List[SubmissionResponse]
+    winner_id: int
+    losser_id: int
+    reason: str
+    class Config:
+        from_attributes=True
