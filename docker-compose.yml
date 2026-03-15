@@ -1,20 +1,37 @@
-
 services:
 
   backend:
-    build: ./
+    build: .
     container_name: codered-api
+    command: uv run uvicorn app.main:app --host 0.0.0.0 --port 8000
     ports:
       - "8000:8000"
     depends_on:
       - redis
-    environment:
-      REDIS_URL: redis://redis:6379
+    env_file:
+      - .env
     volumes:
       - .:/app
+
+  matchmaking-worker:
+    build: .
+    command: uv run python -m workers.matchmaking_worker
+    depends_on:
+      - redis
+    env_file:
+      - .env
+
+  disconnect-worker:
+    build: .
+    command: uv run python -m workers.disconnect_listener
+    depends_on:
+      - redis
+    env_file:
+      - .env
 
   redis:
     image: redis:7-alpine
     container_name: codered-redis
     ports:
       - "6379:6379"
+    command: redis-server --notify-keyspace-events Ex

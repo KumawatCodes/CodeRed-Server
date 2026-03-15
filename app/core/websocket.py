@@ -60,6 +60,21 @@ async def websocket_endpoint(websocket: WebSocket):
             if event_type == "join_queue":
                 await matchmaking_service.join_queue(user.user_id)
 
+            elif event_type == "leave_queue":
+                await matchmaking_service.leave_queue(user.user_id)
+
+            elif event_type == "resume_match":
+                await match_service.resume_match(user.user_id)
+
+            elif event_type == "end_match":
+                 match_id = payload.get("match_id")
+
+                 if not match_id:
+                     print("Invalid match_id")
+                     continue
+
+                 await match_service.end_match(match_id)
+
             elif event_type == "code_update":
                 await match_service.handle_progress(user.user_id, payload)
 

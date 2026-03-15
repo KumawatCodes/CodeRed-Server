@@ -6,13 +6,11 @@ from app.models.user import User
 from app.models.submission import Submission
 from app.core.websocket import websocket_endpoint
 from app.core.ws_manager import manager
-from app.services.webSocket.matchmaking.matchmaking_worker import matchmaking_loop
+from app.core.event_listener import event_listener
 
 
 from app.config import settings
 from app.database import engine, Base
-
-
 
 def create_application() -> FastAPI:
     """Application factory pattern for better testability"""
@@ -118,6 +116,10 @@ def setup_events(app: FastAPI) -> None:
             await conn.run_sync(Base.metadata.create_all)
         print(" Database tables created successfully")
 
+        # background workers
+        await manager.start_listener()
+        asyncio.create_task(event_listener())
+
     @app.get("/")
     async def root():
         return {
@@ -130,7 +132,7 @@ def setup_events(app: FastAPI) -> None:
     async def health_check():
         return {"status": "healthy", "service": "CodeForge API"}
 
-    asyncio.create_task(matchmaking_loop())
+
 
 # def setup_events(app: FastAPI) -> None:
 #     """Setup startup/shutdown events"""
@@ -141,7 +143,7 @@ def setup_events(app: FastAPI) -> None:
 #         async with engine.begin() as conn:
 #             await conn.run_sync(Base.metadata.create_all)
 #         print(" Database tables created successfully")
-#         await manager.start_listener()
+
 
 
 
