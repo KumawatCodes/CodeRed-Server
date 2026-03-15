@@ -380,10 +380,10 @@ class CodeExecutionService:
         time_compl = None
         space_compl = None
         if verdict == "Accepted":
-            logger.info(f"calculalting complexity {time_compl}, {space_compl}")
+            #logger.info(f"calculalting complexity {time_compl}, {space_compl}")
             passed=True
-            time_compl,space_compl = CodeAnalyzeService.analyze(submission_request.source_code)
-            logger.info(f"fetched complexity {time_compl}, {space_compl}")
+            # time_compl,space_compl = CodeAnalyzeService.analyze(submission_request.source_code)
+            # logger.info(f"fetched complexity {time_compl}, {space_compl}")
         updated_submission = SubmissionResponse(
             verdict=verdict,
             error = error,
