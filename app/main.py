@@ -96,9 +96,6 @@ def setup_routes(app: FastAPI) -> None:
         tags=["friends"]
     )
 
-    #Websocket route
-    app.add_api_websocket_route("/ws",websocket_endpoint)
-
     # app.include_router(
     #     user.router,
     #     prefix="/api/v2/user",
@@ -109,13 +106,13 @@ def setup_routes(app: FastAPI) -> None:
     #     prefix="/api/v2/auth",
     #     tags=["auth"]
     # )
-    # app.include_router(
-    #     code_execution.router,
-    #     prefix="/api/v2/execution",
-    #     tags=["code execution"]
-    # )
-    #Websocket route
-    # app.add_api_websocket_route("/ws",websocket_endpoint)
+    app.include_router(
+        code_execution.router,
+        prefix="/api/v2/execution",
+        tags=["code execution"]
+    )
+    # Websocket route
+    app.add_api_websocket_route("/ws",websocket_endpoint)
 
 
 def setup_events(app: FastAPI) -> None:
@@ -130,7 +127,17 @@ def setup_events(app: FastAPI) -> None:
 
         # background workers
         await manager.start_listener()
-        asyncio.create_task(event_listener())
+        app.state.listener_task = asyncio.create_task(event_listener())
+
+    @app.on_event("shutdown")
+    async def shutdown():
+        task = app.state.listener_task
+        task.cancel()
+    
+        try:
+            await task
+        except asyncio.CancelledError:
+            pass
 
     @app.get("/")
     async def root():
@@ -144,17 +151,15 @@ def setup_events(app: FastAPI) -> None:
     async def health_check():
         return {"status": "healthy", "service": "CodeForge API"}
 
-def setup_events(app: FastAPI) -> None:
-    """Setup startup/shutdown events"""
+# def setup_events(app: FastAPI) -> None:
+#     """Setup startup/shutdown events"""
 
-    @app.on_event("startup")
-    async def startup_event():
+#     @app.on_event("startup")
+#     async def startup_event():
 
-        async with engine.begin() as conn:
-            await conn.run_sync(Base.metadata.create_all)
-        print(" Database tables created successfully")
-        await manager.start_listener()
-
-        asyncio.create_task(matchmaking_loop())
+#         async with engine.begin() as conn:
+#             await conn.run_sync(Base.metadata.create_all)
+#         print(" Database tables created successfully")
+#         await manager.start_listener()
 
 app = create_application()
