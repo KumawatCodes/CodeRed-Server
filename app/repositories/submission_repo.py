@@ -79,6 +79,15 @@ class SubmissionRepo:
             submission info
         """
 
-        stmt= select(Submission).where(Submission.user_id == user_id and Submission.match_id == match_id)
+        stmt = (
+            select(Submission)
+            .where(
+                Submission.user_id == user_id,
+                Submission.match_id == match_id
+            )
+            .order_by(Submission.judged_at.desc())  # latest submission
+            .limit(1)
+        )
+
         result = await db.execute(stmt)
         return result.scalar_one_or_none()

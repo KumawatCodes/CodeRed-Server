@@ -5,7 +5,9 @@ from app.services.user_service import UserService
 from app.database import AsyncSessionLocal
 from app.new_services.execution_service import CodeExecutionService
 from app.schemas.submission import FinalWinnerRequest
+import logging
 
+logger = logging.getLogger(__name__)
 
 async def event_listener():
 
@@ -75,7 +77,7 @@ async def event_listener():
                                                                             player1_id=player1,
                                                                             player2_id=player2,
                                                                             match_id=match_id
-                                                                        ))
+                                                                        ))                                                      
                     for player in event["players"]:
                         await manager.send_to_user(player, {
                             "type": "match_end",

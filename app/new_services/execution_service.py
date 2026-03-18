@@ -425,7 +425,11 @@ class CodeExecutionService:
         """
         Finalizeing the winner
         """
-        logger.info("declaring winner and losser")
+        print(winner_request)
+        logger.info("declaring winner and losser",extra={
+            "data": winner_request.player1_id
+        })
+
 
         player1_result = await SubmissionRepo.get_submission_by_match_id(db,winner_request.player1_id,winner_request.match_id)
         player2_result = await SubmissionRepo.get_submission_by_match_id(db,winner_request.player2_id,winner_request.match_id)
@@ -444,17 +448,17 @@ class CodeExecutionService:
             reason = "Winner's test cases passed more as compare to losser's testcase"
 
         else:
-            if player1_result.judged_at > player2_result.judged_at:
+            if player1_result.judged_at < player2_result.judged_at:
                 winner = player1_result.user_id
                 losser = player2_result.user_id
-                reason = f"Winner has submitted earlier before by {player1_result.judged_at - player2_result.judged_at}"
+                reason = f"Winner has 1 submitted earlier before by {player1_result.judged_at - player2_result.judged_at}"
             else:
                 winner = player2_result.user_id
                 losser = player1_result.user_id 
-                reason = f"Winner has submitted earlier before by {player2_result.judged_at - player1_result.judged_at}"
+                reason = f"Winner has 2 submitted earlier before by {player2_result.judged_at - player1_result.judged_at}"
         
         result1 = SubmissionResponse(
-            passed= player1_result.passed,
+            # passed= player1_result.passed,
             verdict= player1_result.verdict,
             execution_time=player1_result.execution_time,
             memory_used= player1_result.memory_used,
@@ -465,7 +469,7 @@ class CodeExecutionService:
             space_complexity=player1_result.space_complexity
         )
         result2 = SubmissionResponse(
-            passed= player2_result.passed,
+            # passed= player2_result.passed,
             verdict= player2_result.verdict,
             execution_time=player2_result.execution_time,
             memory_used= player2_result.memory_used,
