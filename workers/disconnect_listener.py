@@ -27,7 +27,7 @@ class DisconnectListener:
                 if not match_id:
                     continue
 
-                await match_service.end_match(match_id)
+                await match_service.submit_code(user_id)
 
 if __name__ == "__main__":
     listener = DisconnectListener()

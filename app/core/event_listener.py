@@ -3,6 +3,8 @@ from app.core.redis import redis_client
 from app.core.ws_manager import manager
 from app.services.user_service import UserService
 from app.database import AsyncSessionLocal
+from app.new_services.execution_service import CodeExecutionService
+from app.schemas.submission import FinalWinnerRequest
 
 
 async def event_listener():
@@ -66,9 +68,18 @@ async def event_listener():
                     })
 
                 elif event["type"] == "match_end":
+                    player1, player2 = event["players"]
+                    match_id = event["match_id"]
+                    async with AsyncSessionLocal() as db:
+                        results = await CodeExecutionService.winner_declare(db,FinalWinnerRequest(
+                                                                            player1_id=player1,
+                                                                            player2_id=player2,
+                                                                            match_id=match_id
+                                                                        ))
                     for player in event["players"]:
                         await manager.send_to_user(player, {
                             "type": "match_end",
+                            "payload": results.model_dump()
                         })
 
                 elif event["type"] == "resume_match":

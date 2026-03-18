@@ -119,8 +119,6 @@ class MatchService:
         if not match_id:
             return
 
-        match_id = match_id.decode()
-
         match = await redis_client.hgetall(f"match:{match_id}")
 
         player1 = int(match["player1"])
@@ -137,8 +135,8 @@ class MatchService:
         # check if both submitted
         match = await redis_client.hgetall(f"match:{match_id}")
 
-        p1_done = int(match[b"player1_submitted"])
-        p2_done = int(match[b"player2_submitted"])
+        p1_done = int(match["player1_submitted"])
+        p2_done = int(match["player2_submitted"])
 
         if p1_done and p2_done:
             await self.end_match(match_id)
