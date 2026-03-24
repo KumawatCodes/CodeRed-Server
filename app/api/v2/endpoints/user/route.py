@@ -6,7 +6,7 @@ from app.new_services.upload_service import UploadServices
 from app.new_services.user_service import UserService
 from app.core.auth import get_current_user_id,AuthService
 from app.schemas.auth import AuthResponse
-from app.schemas.user import UserProfileUpdate
+from app.schemas.user import UserProfileUpdate,UserResponse, UserProfileFetch
 from app.core.exceptions import UsernameAlreadyTakenError,UserNotFoundError,InvalidImageTypeError,FileTooLargeError
 
 router = APIRouter()
@@ -77,4 +77,25 @@ async def user_complete_profile(
         raise HTTPException(
             status_code= status.HTTP_400_BAD_REQUEST,
             detail= "image type is invalid!"
+        )
+    
+@router.get("/user/{user_id}",response_model=UserResponse)
+async def fetch_user_info(
+    db: AsyncSession = Depends(get_db),
+    request_data = UserProfileFetch
+):
+    try:
+        user_info = None
+
+        if not request_data.user_id:
+            user_info = UserService.get_user_by_id(db,request_data.user_id)
+        else:
+            user_info = UserService.get_user_by_id(db,request_data.username)
+        
+        return user_info
+
+    except UserNotFoundError:
+        raise HTTPException(
+            status_code= status.HTTP_404_NOT_FOUND,
+            detail= "user doesn't exists"
         )
