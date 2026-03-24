@@ -4,6 +4,7 @@ from app.core.redis import redis_client
 from app.core.ws_manager import manager
 from app.services.webSocket.matchmaking.match_listener import match_listener
 from app.services.user_service import UserService
+import random
 
 MATCH_QUEUE_SET = "matchmaking:queue:set"
 
@@ -12,6 +13,7 @@ class MatchService:
     async def create_match(self, player1: int, player2: int):
 
         match_id = str(uuid.uuid4())
+        question_no= random.randint(1,40)
 
         await redis_client.hset(
             f"match:{match_id}",
@@ -20,9 +22,19 @@ class MatchService:
                 "player2": player2,
                 "player1_submitted": 0,
                 "player2_submitted": 0,
-                "status": "active"
+                "status": "active",
+                "question_no":question_no
             }
         )
+        payload = {
+            "type": "match_found",
+            "match_id": match_id,
+            "player1": player1,
+            "player2": player2,
+            "question_no": question_no
+        }
+
+        print("FINAL PAYLOAD:", payload)
         await redis_client.expire(f"match:{match_id}", 3600)
 
         await redis_client.srem(MATCH_QUEUE_SET,player1)
@@ -37,7 +49,8 @@ class MatchService:
                 "type": "match_found",
                 "match_id": match_id,
                 "player1": player1,
-                "player2": player2
+                "player2": player2,
+                "question_no":question_no
             })
         )
     async def handle_progress(self, user_id: int, payload: dict):
@@ -46,8 +59,6 @@ class MatchService:
 
         if not match_id:
             return
-
-        match_id = match_id.decode()
 
         match = await redis_client.hgetall(f"match:{match_id}")
 
@@ -82,6 +93,7 @@ class MatchService:
 
         player1 = int(match["player1"])
         player2 = int(match["player2"])
+        question_no = int(match["question_no"])
 
         await redis_client.publish(
             "match_events",
@@ -89,7 +101,8 @@ class MatchService:
                 "type" : "resume_match",
                 "match_id": match_id,
                 "player1": player1,
-                "player2": player2
+                "player2": player2,
+                "question_no": question_no,
             }))
 
     async def end_match(self, match_id: str):
@@ -152,5 +165,5 @@ class MatchService:
                 "opponent": opponent
             })
         )
-
+   
 match_service = MatchService()

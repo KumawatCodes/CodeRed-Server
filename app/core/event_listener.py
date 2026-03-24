@@ -29,6 +29,7 @@ async def event_listener():
                     player2 = event["player2"]
                     print("match_found:: ",player1,player2)
                     match_id = event["match_id"]
+                    question_no = event["question_no"]
 
                     async with AsyncSessionLocal() as db:
                         p1 = await UserService.get_user_by_user_id(db, player1)
@@ -44,7 +45,8 @@ async def event_listener():
                                 "username": p2.username,
                                 "avatar": p2.profile_picture,
                                 "rank": p2.current_rank
-                            }
+                            },
+                            "question_no": question_no
                         }
                     })
 
@@ -58,7 +60,8 @@ async def event_listener():
                                 "username": p1.username,
                                 "avatar": p1.profile_picture,
                                 "rank": p1.current_rank
-                            }
+                            },
+                            "question_no": question_no
                         }
                     })
                     print("match is found and it is sended")
@@ -77,7 +80,7 @@ async def event_listener():
                                                                             player1_id=player1,
                                                                             player2_id=player2,
                                                                             match_id=match_id
-                                                                        ))                                                      
+                                                                        ))
                     for player in event["players"]:
                         await manager.send_to_user(player, {
                             "type": "match_end",
@@ -85,10 +88,10 @@ async def event_listener():
                         })
 
                 elif event["type"] == "resume_match":
-                    # opponent_id = player2 if user_id == player1 else player1
                     user1 = event["player1"]
                     user2 = event["player2"]
                     match_id = event["match_id"]
+                    question_no = event["question_no"]
                     async with AsyncSessionLocal() as db:
                         player1 = await UserService.get_user_by_user_id(db, user1)
                         player2 = await UserService.get_user_by_user_id(db, user2)
@@ -112,7 +115,8 @@ async def event_listener():
                         "payload": {
                             "match_id": match_id,
                             "matchSource":"resume",
-                            "opponent": player2_info
+                            "opponent": player2_info,
+                            "question_no": question_no,
                         }
                     })
 
@@ -121,7 +125,8 @@ async def event_listener():
                         "payload": {
                             "match_id": match_id,
                             "matchSource":"resume",
-                            "opponent": player1_info
+                            "opponent": player1_info,
+                            "question_no": question_no,
                         }
                     })
 

@@ -114,7 +114,6 @@ def setup_routes(app: FastAPI) -> None:
     # Websocket route
     app.add_api_websocket_route("/ws",websocket_endpoint)
 
-
 def setup_events(app: FastAPI) -> None:
     """Setup startup/shutdown events"""
 
@@ -125,7 +124,7 @@ def setup_events(app: FastAPI) -> None:
             await conn.run_sync(Base.metadata.create_all)
         print(" Database tables created successfully")
 
-        # background workers
+        # background workers of 
         await manager.start_listener()
         app.state.listener_task = asyncio.create_task(event_listener())
 
@@ -133,7 +132,7 @@ def setup_events(app: FastAPI) -> None:
     async def shutdown():
         task = app.state.listener_task
         task.cancel()
-    
+
         try:
             await task
         except asyncio.CancelledError:
@@ -150,16 +149,5 @@ def setup_events(app: FastAPI) -> None:
     @app.get("/health")
     async def health_check():
         return {"status": "healthy", "service": "CodeForge API"}
-
-# def setup_events(app: FastAPI) -> None:
-#     """Setup startup/shutdown events"""
-
-#     @app.on_event("startup")
-#     async def startup_event():
-
-#         async with engine.begin() as conn:
-#             await conn.run_sync(Base.metadata.create_all)
-#         print(" Database tables created successfully")
-#         await manager.start_listener()
 
 app = create_application()

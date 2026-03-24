@@ -69,6 +69,9 @@ async def websocket_endpoint(websocket: WebSocket):
             elif event_type == "submit_code":
                 await match_service.submit_code(user.user_id)
 
+            elif event_type == "player_submit":
+                await match_service.player_submit(user.user_id)
+
             elif event_type == "end_match":
                  match_id = payload.get("match_id")
 
