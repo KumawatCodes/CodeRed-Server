@@ -85,7 +85,7 @@ class SubmissionRepo:
                 Submission.user_id == user_id,
                 Submission.match_id == match_id
             )
-            .order_by(Submission.judged_at.desc())  # latest submission
+            .order_by(Submission.judged_at.desc())
             .limit(1)
         )
 

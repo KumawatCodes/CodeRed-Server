@@ -63,7 +63,7 @@ def setup_routes(app: FastAPI) -> None:
     from app.api.v1.endpoints import friends
     from app.api.v1.endpoints import auth
     from app.api.v2.endpoints import user
-    # from app.api.v2.endpoints import auth
+    from app.api.v2.endpoints import auths
     from app.api.v2.endpoints import code_execution
     #authentication APIs
     app.include_router(
@@ -96,16 +96,16 @@ def setup_routes(app: FastAPI) -> None:
         tags=["friends"]
     )
 
-    # app.include_router(
-    #     user.router,
-    #     prefix="/api/v2/user",
-    #     tags=["user"]
-    # )
-    # app.include_router(
-    #     auth.router,
-    #     prefix="/api/v2/auth",
-    #     tags=["auth"]
-    # )
+    app.include_router(
+        user.router,
+        prefix="/api/v2/user",
+        tags=["user"]
+    )
+    app.include_router(
+        auths.router,
+        prefix="/api/v2/auth",
+        tags=["auth"]
+    )
     app.include_router(
         code_execution.router,
         prefix="/api/v2/execution",

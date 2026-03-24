@@ -380,10 +380,10 @@ class CodeExecutionService:
         time_compl = None
         space_compl = None
         if verdict == "Accepted":
-            #logger.info(f"calculalting complexity {time_compl}, {space_compl}")
+            logger.info(f"calculalting complexity {time_compl}, {space_compl}")
             passed=True
-            # time_compl,space_compl = CodeAnalyzeService.analyze(submission_request.source_code)
-            # logger.info(f"fetched complexity {time_compl}, {space_compl}")
+            time_compl,space_compl = CodeAnalyzeService.analyze(submission_request.source_code)
+            logger.info(f"fetched complexity {time_compl}, {space_compl}")
         updated_submission = SubmissionResponse(
             verdict=verdict,
             error = error,
@@ -416,6 +416,14 @@ class CodeExecutionService:
             time_complexity=time_compl,
             space_complexity=space_compl
         )
+    
+    @staticmethod
+    def log_model(obj, name="Model"):
+        if obj is None:
+            logger.warning(f"{name} is None")
+            return
+        data = {c.name: getattr(obj, c.name) for c in obj.__table__.columns}
+        logger.info(f"{name} data: {data}")
 
     @staticmethod
     async def winner_declare(
@@ -434,6 +442,12 @@ class CodeExecutionService:
         player1_result = await SubmissionRepo.get_submission_by_match_id(db,winner_request.player1_id,winner_request.match_id)
         player2_result = await SubmissionRepo.get_submission_by_match_id(db,winner_request.player2_id,winner_request.match_id)
 
+
+        CodeExecutionService.log_model(player1_result, "Player1")
+        CodeExecutionService.log_model(player2_result, "Player2")
+
+        if not player1_result or not player2_result:
+            raise ValueError("Submission not found")
         winner=None
         losser=None
         reason=None
@@ -457,28 +471,8 @@ class CodeExecutionService:
                 losser = player1_result.user_id 
                 reason = f"Winner has 2 submitted earlier before by {player2_result.judged_at - player1_result.judged_at}"
         
-        result1 = SubmissionResponse(
-            # passed= player1_result.passed,
-            verdict= player1_result.verdict,
-            execution_time=player1_result.execution_time,
-            memory_used= player1_result.memory_used,
-            stderr= player1_result.error_message,
-            test_cases_passed=player1_result.test_cases_passed,
-            total_test_cases= player1_result.total_test_cases,
-            time_complexity=player1_result.time_complexity,
-            space_complexity=player1_result.space_complexity
-        )
-        result2 = SubmissionResponse(
-            # passed= player2_result.passed,
-            verdict= player2_result.verdict,
-            execution_time=player2_result.execution_time,
-            memory_used= player2_result.memory_used,
-            stderr= player2_result.error_message,
-            test_cases_passed=player2_result.test_cases_passed,
-            total_test_cases= player2_result.total_test_cases,
-            time_complexity=player2_result.time_complexity,
-            space_complexity=player2_result.space_complexity
-        )
+        result1 = SubmissionResponse.model_validate(player1_result)
+        result2 = SubmissionResponse.model_validate(player2_result)
         results = None
         if player1_result.user_id == winner:
             results = [result1,result2] 
@@ -491,8 +485,3 @@ class CodeExecutionService:
                 reason= reason
         )
             
-
-        
-
-
-        

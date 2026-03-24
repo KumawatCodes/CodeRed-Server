@@ -65,8 +65,11 @@ class SubmissionResponse(BaseModel):
     space_complexity: Optional[str]=None
     source_code: Optional[str]=None
 
-    class Config:
-        from_attributes = True  
+    # class Config:
+    #     from_attributes = True  
+    model_config={
+        "from_attributes": True 
+    }
 
 class SubmissionSimpleResponse(BaseModel):
     """A lightweight response for lists"""

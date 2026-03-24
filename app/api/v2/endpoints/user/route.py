@@ -79,23 +79,27 @@ async def user_complete_profile(
             detail= "image type is invalid!"
         )
     
-@router.get("/user/{user_id}",response_model=UserResponse)
+@router.get("/user-details", response_model=UserResponse)
 async def fetch_user_info(
+    user_id: int | None = None,
+    username: str | None = None,
     db: AsyncSession = Depends(get_db),
-    request_data = UserProfileFetch
 ):
     try:
-        user_info = None
-
-        if not request_data.user_id:
-            user_info = UserService.get_user_by_id(db,request_data.user_id)
+        if user_id:
+            user_info = await UserService.get_user_by_id(db, user_id)
+        elif username:
+            user_info = await UserService.get_user_by_username(db, username)
         else:
-            user_info = UserService.get_user_by_id(db,request_data.username)
-        
+            raise HTTPException(
+                status_code=400,
+                detail="Provide either user_id or username"
+            )
+
         return user_info
 
     except UserNotFoundError:
         raise HTTPException(
-            status_code= status.HTTP_404_NOT_FOUND,
-            detail= "user doesn't exists"
+            status_code=404,
+            detail="User doesn't exist"
         )

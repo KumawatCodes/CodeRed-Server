@@ -100,10 +100,9 @@ async def complete_profile(
         message="Profile completed successfully!"
     )
 
-@router.get("/me")
+@router.get("/me",response_model = UserResponse)
 async def get_current_user_profile(
     user_id: int = Depends(get_current_user_id),
-    response_model = UserResponse,
     db: AsyncSession = Depends(get_db)
 ):
     user = await UserService.get_user_by_user_id(db,user_id)
