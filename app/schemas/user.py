@@ -16,6 +16,9 @@ class PaginatedUsers(BaseModel):
     users: List[UserListItem]
     next_cursor: Optional[int]
 
+class UserProfileFetch(BaseModel):
+    user_id: Optional[int]=None
+    username: Optional[str]=None
 
 class UserBase(BaseModel):
     username: Optional[str] = Field(None, min_length=3, max_length=50, pattern=r'^[a-zA-Z0-9_]+$')
