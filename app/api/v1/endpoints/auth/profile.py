@@ -31,7 +31,8 @@ async def complete_profile(
     db: AsyncSession = Depends(get_db)
 ):
     """Complete user profile after registration"""
-    # Check if username is available
+    # Check if username is available'
+    print(f"registring user id {user_id} with user name {username}")
     username_exists = await UserService.get_user_by_user_id(db, user_id)
     # print(user_id)
     # print(username)
