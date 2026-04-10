@@ -3,7 +3,7 @@ from app.core.redis import redis_client
 from app.core.ws_manager import manager
 from app.services.user_service import UserService
 from app.database import AsyncSessionLocal
-from app.new_services.execution_service import CodeExecutionService
+from app.new_services.piston_execution_service import CodeExecutionService
 from app.schemas.submission import FinalWinnerRequest
 import logging
 

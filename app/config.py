@@ -23,6 +23,8 @@ class Settings(BaseSettings):
     PISTON_API_URL: str
     # APIs
 
+    JUDGE0_API_KEY: str = ""
+    UPSTASH_REDIS_URL: str = ""
     # Application
     PROJECT_NAME: str = "CodeRed"
     VERSION: str = "1.0.0"
