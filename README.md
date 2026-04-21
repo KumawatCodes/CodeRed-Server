@@ -168,7 +168,7 @@ This shows a thumbnail image that links to the Drive video when clicked — the 
   │  Cloudinary     │          └───────────────────────────┘
   └─────────────────┘
 ```
-![System Design](Documents/System%20Design/system%20design.jpeg)
+![System Design](https://github.com/KumawatCodes/CodeRed-Server/blob/main/documents/System%20Design/system%20design.jpeg)
 ### Key Flows
 
 **1. User Authentication**
@@ -196,7 +196,7 @@ Admin uploads image → Cloudinary (store) → URL returned → Saved to Postgre
 ---
 
 ## 🗄 Database Schema
-![Database Schema](Documents/migrations/database%20schema.jpeg)
+![Database Schema](https://github.com/KumawatCodes/CodeRed-Server/blob/main/documents/migrations/database%20schema.jpeg)
 > Core entities and their relationships.
 
 ### Users
