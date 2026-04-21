@@ -1,6 +1,6 @@
 <div align="center">
 
-# ⚡ CodeBattle Platform
+# ⚡ CodeRed Platform
 
 ### A real-time competitive coding platform — built with FastAPI, WebSockets, and AI-powered hints
 
@@ -52,10 +52,8 @@ CodeBattle is a full-stack competitive coding platform where users can solve alg
 
 | Resource | Link |
 |---|---|
-| 🌍 Frontend App | `https://your-frontend-url.com` ← *paste your URL here* |
-| 📡 Backend API | `https://your-backend-api.com` ← *paste your API URL here* |
-| 📘 Swagger Docs | `https://your-backend-api.com/docs` |
-| 📗 ReDoc | `https://your-backend-api.com/redoc` |
+| 🌍 Frontend App | `https://codered-client.vercel.app/` ← *paste your URL here* |
+| 📡 Backend API Docs| `coming soon` ← *paste your API URL here* |
 
 ---
 
@@ -63,34 +61,10 @@ CodeBattle is a full-stack competitive coding platform where users can solve alg
 
 > A walkthrough of the platform's core features — matchmaking, code submission, and AI hints.
 
-### ▶️ How to embed your demo video
-
-**Option 1 — YouTube (Recommended)**
-
-Upload your demo to YouTube (can be Unlisted) and paste the link below:
-
-```
-[![CodeBattle Demo](https://img.youtube.com/vi/YOUR_VIDEO_ID/maxresdefault.jpg)](https://www.youtube.com/watch?v=YOUR_VIDEO_ID)
-```
-
-Replace `YOUR_VIDEO_ID` with the ID from your YouTube URL, e.g. `https://youtube.com/watch?v=abc123` → ID is `abc123`.
-
-**Option 2 — GitHub-hosted MP4**
-
-If your video is under 10MB, you can drag-and-drop it directly into a GitHub Issue or PR comment — GitHub hosts it and gives you a CDN link you can embed in the README like this:
+**Google Drive**
 
 ```markdown
-https://user-images.githubusercontent.com/YOUR_USER_ID/demo.mp4
-```
-
-**Option 3 — Google Drive**
-
-> ⚠️ Google Drive video links do **not** embed natively in GitHub READMEs. GitHub Markdown does not render `<iframe>` or Drive preview links.
-> 
-> **What to do instead:** Share the Drive link as a plain clickable link with a thumbnail image:
-
-```markdown
-[![Watch Demo on Google Drive](https://via.placeholder.com/800x450?text=Click+to+Watch+Demo)](https://drive.google.com/file/d/YOUR_FILE_ID/view)
+[![Watch Demo on Google Drive](https://via.placeholder.com/800x450?text=Click+to+Watch+Demo)](https://drive.google.com/file/d/YOUR_1YXx7Ctc8OtAtF_sioXX9FQHlQwPZfrlNFILE_ID/view)
 ```
 
 This shows a thumbnail image that links to the Drive video when clicked — the best you can do with Drive on GitHub.
@@ -99,7 +73,7 @@ This shows a thumbnail image that links to the Drive video when clicked — the 
 
 **👉 Current Demo Link:**
 
-[![Watch Demo](https://img.shields.io/badge/▶_Watch_Demo-Google_Drive-4285F4?style=for-the-badge&logo=googledrive)](https://drive.google.com/YOUR_LINK_HERE)
+[![Watch Demo](https://img.shields.io/badge/▶_Watch_Demo-Google_Drive-4285F4?style=for-the-badge&logo=googledrive)](https://drive.google.com/file/d/1YXx7Ctc8OtAtF_sioXX9FQHlQwPZfrlN/view?usp=sharing)
 
 > *(Replace the link above with your actual Google Drive share link)*
 
@@ -194,7 +168,7 @@ This shows a thumbnail image that links to the Drive video when clicked — the 
   │  Cloudinary     │          └───────────────────────────┘
   └─────────────────┘
 ```
-
+![System Design](Documents/System%20Design/system%20design.jpeg)
 ### Key Flows
 
 **1. User Authentication**
@@ -222,7 +196,7 @@ Admin uploads image → Cloudinary (store) → URL returned → Saved to Postgre
 ---
 
 ## 🗄 Database Schema
-
+![Database Schema](Documents/migrations/database%20schema.jpeg)
 > Core entities and their relationships.
 
 ### Users
