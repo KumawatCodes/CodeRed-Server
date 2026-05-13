@@ -7,7 +7,8 @@ from app.core.exceptions import NoLanguageFound, FailedPistonExecution, UserNotF
 from app.core.auth import get_current_user_id
 from app.new_services.user_service import UserService
 # from app.new_services.piston_execution_service import CodeExecutionService
-from app.new_services.judge0_execution_service import CodeExecutionService 
+# from app.new_services.judge0_execution_service import CodeExecutionService 
+from app.new_services.local_execution_service import LocalCodeExecutionService as CodeExecutionService
 
 router = APIRouter()
 

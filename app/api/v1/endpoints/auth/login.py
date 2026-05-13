@@ -52,5 +52,5 @@ async def login(
         token_type="bearer",
         user_id=user.user_id,
         profile_complete=user.profile_complete,
-        message="Login hai mc successful" if user.profile_complete else "Profile completion required"
+        message="Login successful" if user.profile_complete else "Profile completion required"
     )
