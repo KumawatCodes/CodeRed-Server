@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: codered-api
+  labels:
+    app: codered-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: codered-api
+  template:
+    metadata:
+      labels:
+        app: codered-api
+    spec:
+      containers:
+        - name: codered-api
+          image: yourdockerhubusername/codered-api:latest
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: codered-config
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: codered-secrets
+                  key: DATABASE_URL
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: codered-secrets
+                  key: SECRET_KEY
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 5

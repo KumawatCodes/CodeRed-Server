@@ -1,41 +1,3 @@
-# services:
-
-#   backend:
-#     build: .
-#     container_name: codered-api
-#     command: uv run uvicorn app.main:app --host 0.0.0.0 --port 8000
-#     ports:
-#       - "8000:8000"
-#     depends_on:
-#       - redis
-#     env_file:
-#       - .env
-#     volumes:
-#       - .:/app
-
-#   matchmaking-worker:
-#     build: .
-#     command: uv run python -m workers.matchmaking_worker
-#     depends_on:
-#       - redis
-#     env_file:
-#       - .env
-
-#   disconnect-worker:
-#     build: .
-#     command: uv run python -m workers.disconnect_listener
-#     depends_on:
-#       - redis
-#     env_file:
-#       - .env
-
-#   redis:
-#     image: redis:7-alpine
-#     container_name: codered-redis
-#     ports:
-#       - "6379:6379"
-#     command: redis-server --notify-keyspace-events Ex
-
 services:
 
   backend:
@@ -48,10 +10,13 @@ services:
       - redis
     env_file:
       - .env
+    environment:
+      - UV_LINK_MODE=copy
     volumes:
       - .:/app
-      - /var/run/docker.sock:/var/run/docker.sock   # gives backend access to host Docker
-      - /tmp:/tmp                                    # shared temp dir for code files
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp:/tmp
+      - backend_venv:/app/.venv
 
   matchmaking-worker:
     build: .
@@ -60,8 +25,11 @@ services:
       - redis
     env_file:
       - .env
+    environment:
+      - UV_LINK_MODE=copy
     volumes:
       - .:/app
+      - worker_venv:/app/.venv
 
   disconnect-worker:
     build: .
@@ -70,8 +38,11 @@ services:
       - redis
     env_file:
       - .env
+    environment:
+      - UV_LINK_MODE=copy
     volumes:
       - .:/app
+      - disconnect_venv:/app/.venv
 
   redis:
     image: redis:7-alpine
@@ -79,3 +50,28 @@ services:
     ports:
       - "6379:6379"
     command: redis-server --notify-keyspace-events Ex
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: codered-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - backend
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: codered-grafana
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - prometheus
+
+volumes:
+  backend_venv:
+  worker_venv:
+  disconnect_venv:

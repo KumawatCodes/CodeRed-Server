@@ -71,4 +71,5 @@ dependencies = [
     "langchain-mistralai",
     "langchain_huggingface",
     "locust>=2.43.3",
+    "prometheus-fastapi-instrumentator>=6.1.0",
 ]
