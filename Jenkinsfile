@@ -43,9 +43,9 @@ pipeline {
             steps {
                 echo 'Deploying to Minikube...'
                 bat '''
-                    minikube update-context
                     copy /Y C:\\Users\\himan\\.kube\\config C:\\ProgramData\\Jenkins\\.jenkins\\config
-                    kubectl --kubeconfig C:\\ProgramData\\Jenkins\\.jenkins\\config set image deployment/codered-api codered-api=zen1tsu/codered-api:%BUILD_NUMBER%
+                    kubectl --kubeconfig C:\\ProgramData\\Jenkins\\.jenkins\\config apply -f k8s/
+                    kubectl --kubeconfig C:\\ProgramData\\Jenkins\\.jenkins\config set image deployment/codered-api codered-api=zen1tsu/codered-api:%BUILD_NUMBER%
                 '''
             }
         }
