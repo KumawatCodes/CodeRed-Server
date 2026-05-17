@@ -42,8 +42,11 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 echo 'Deploying to Minikube...'
-                bat "kubectl --kubeconfig C:\\ProgramData\\Jenkins\\.jenkins\\config set image deployment/codered-api codered-api=%DOCKER_HUB_REPO%:%BUILD_NUMBER%"
-                bat "kubectl --kubeconfig C:\\ProgramData\\Jenkins\\.jenkins\\config rollout status deployment/codered-api"
+                bat '''
+                    minikube update-context
+                    copy /Y C:\\Users\\himan\\.kube\\config C:\\ProgramData\\Jenkins\\.jenkins\\config
+                    kubectl --kubeconfig C:\\ProgramData\\Jenkins\\.jenkins\\config set image deployment/codered-api codered-api=zen1tsu/codered-api:%BUILD_NUMBER%
+                '''
             }
         }
     }
