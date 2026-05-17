@@ -3,18 +3,24 @@ services:
   backend:
     build: .
     container_name: codered-api
+
     command: uv run uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
     ports:
       - "8000:8000"
+
     depends_on:
       - redis
+
     env_file:
       - .env
+
     environment:
       - UV_LINK_MODE=copy
+      - DOCKER_HOST=tcp://host.docker.internal:2375
+
     volumes:
       - .:/app
-      - /var/run/docker.sock:/var/run/docker.sock
       - /tmp:/tmp
       - backend_venv:/app/.venv
 
@@ -75,3 +81,4 @@ volumes:
   backend_venv:
   worker_venv:
   disconnect_venv:
+

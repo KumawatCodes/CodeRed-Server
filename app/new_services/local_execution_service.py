@@ -60,7 +60,7 @@ class LocalCodeExecutionService:
     @staticmethod
     async def _run_all_in_docker(lang_id: int, code: str, test_cases: List[TestCaseItem]) -> List[ExecutionResult]:
         import tempfile, os, time, shutil, subprocess
-
+        os.environ["DOCKER_HOST"] = "tcp://host.docker.internal:2375"
         config = LocalCodeExecutionService.get_language(lang_id)
         image  = config["image"]
         ext    = FILE_EXTENSION[lang_id]

@@ -6,3 +6,4 @@ __pycache__/
 .idea/
 .vscode/
 .obsidian/
+.k8s/secret.yaml

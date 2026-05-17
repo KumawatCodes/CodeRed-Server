@@ -16,26 +16,29 @@ spec:
     spec:
       containers:
         - name: codered-api
-          image: yourdockerhubusername/codered-api:latest
+          image: zen1tsu/codered-api:latest
           ports:
             - containerPort: 8000
           envFrom:
+            - secretRef:
+                name: codered-secrets
             - configMapRef:
                 name: codered-config
-          env:
-            - name: DATABASE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: codered-secrets
-                  key: DATABASE_URL
-            - name: SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: codered-secrets
-                  key: SECRET_KEY
+          volumeMounts:
+            - name: docker-sock
+              mountPath: /var/run/docker.sock
+            - name: tmp
+              mountPath: /tmp
           readinessProbe:
             httpGet:
               path: /health
               port: 8000
-            initialDelaySeconds: 10
+            initialDelaySeconds: 15
             periodSeconds: 5
+      volumes:
+        - name: docker-sock
+          hostPath:
+            path: /var/run/docker.sock
+        - name: tmp
+          hostPath:
+            path: /tmp
