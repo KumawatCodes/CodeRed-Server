@@ -60,6 +60,11 @@ resource "aws_instance" "codered_server" {
   key_name               = "codered-key"
   vpc_security_group_ids = [aws_security_group.codered_sg.id]
 
+  root_block_device {
+    volume_size = 20
+    volume_type = "gp3"
+  }
+
   # User data - runs on first boot, installs Docker and starts CodeRed
   user_data = <<-EOF
     #!/bin/bash
@@ -75,7 +80,7 @@ resource "aws_instance" "codered_server" {
 
     # Clone and run CodeRed
     cd /home/ubuntu
-    git clone https://github.com/KumawatCodes/CodeRed-Server.git
+    git clone -b cloud-project https://github.com/KumawatCodes/CodeRed-Server.git
     cd CodeRed-Server
     docker-compose up -d
   EOF
