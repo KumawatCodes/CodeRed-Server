@@ -7,3 +7,13 @@ __pycache__/
 .vscode/
 .obsidian/
 .k8s/secret.yaml
+
+# Terraform
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+terraform/*.tfvars
+
+# Key files
+*.pem
